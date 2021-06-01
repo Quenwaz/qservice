@@ -5,6 +5,18 @@ namespace qservice{
 
 bool fucku();
 
+namespace http{
+
+    class HttpParser
+    {
+    public:
+        
+
+
+    };
+
+}
+
 
 }
 

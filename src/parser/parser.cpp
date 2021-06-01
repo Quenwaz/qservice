@@ -2,5 +2,5 @@
 
 bool qservice::fucku()
 {
-    return true;
+    return false;
 }
