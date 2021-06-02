@@ -17,3 +17,4 @@ endfunction()
 
 
 qservice_test(first_test)
+qservice_test(qservice_test)
