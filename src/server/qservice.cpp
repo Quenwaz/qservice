@@ -3,7 +3,7 @@
 
 qservice::QService::QService(const char* host, unsigned int port)
 {
-
+    
 }
 
 
