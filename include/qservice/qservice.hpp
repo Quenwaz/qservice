@@ -11,6 +11,7 @@
 #ifndef _h_qservice_inclued__
 #define _h_qservice_inclued__
 #include <functional>
+#include <memory>
 #include <qservice/httpreq.hpp>
 #include <qservice/httpres.hpp>
 #include <qservice/httpdefs.hpp>
@@ -45,6 +46,10 @@ public:
      * 
      */
     void Run();
+
+private:
+    struct Impl;
+    std::shared_ptr<Impl> impl_;
 };
 
 }// namespace qservice

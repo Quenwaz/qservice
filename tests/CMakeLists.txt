@@ -12,6 +12,7 @@ function(qservice_test test_name)
     else ()
         target_link_libraries(${TEST_EXECUTABLE} GTest::GTest GTest::Main qservice_static ${CURL_LIBRARIES})
     endif ()
+    target_compile_definitions(${TEST_EXECUTABLE} PRIVATE _GLIBCXX_USE_CXX11_ABI=0)
     add_test(${test_name} ${TEST_EXECUTABLE})
 endfunction()
 

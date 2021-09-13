@@ -10,6 +10,7 @@
  */
 #ifndef _H_parser_included__
 #define _H_parser_included__
+#include <string_view>
 
 namespace qservice{
 
@@ -17,13 +18,22 @@ bool fucku();
 
 namespace http{
 
-    class HttpParser
+class HttpParser
+{
+public:
+    
+    enum Status
     {
-    public:
-        
-
 
     };
+
+
+    Status feed(const std::string_view& data);
+
+    
+
+
+};
 
 }// namespace http
 

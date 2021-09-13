@@ -8,9 +8,15 @@ class QServiceMT : public IQService
 {
 public:
     QServiceMT(const char* host, unsigned int port);
-
+    ~QServiceMT();
 public:
     void run() override;
+
+private:
+    static void* thread_proc(void* data);
+public:
+    struct ThreadData;
+    friend ThreadData;
 };
 
 }
