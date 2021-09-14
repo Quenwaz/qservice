@@ -11,10 +11,11 @@
 #ifndef _H_parser_included__
 #define _H_parser_included__
 #include <string_view>
+#include <sstream>
+#include "message.hpp"
+#include <memory>
 
 namespace qservice{
-
-bool fucku();
 
 namespace http{
 
@@ -24,17 +25,23 @@ public:
     
     enum Status
     {
-
+        kCorruption,
+        kUndone,
+        kFinish
     };
 
 
-    Status feed(const std::string_view& data);
+    Status Feed(const std::string& data);
 
-    
+    bool GetMessage(Message& message);
 
-
+private:
+    Status status_;
+    std::ostringstream stream_;
+    Message message_;
 };
 
+typedef std::shared_ptr<HttpParser> HttpParserPtr;
 }// namespace http
 
 

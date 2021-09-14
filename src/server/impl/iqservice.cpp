@@ -39,12 +39,6 @@ namespace __internal
 
         return true;
     }
-
-
-    enum ConstantVar{
-        kRecvBufSize = 4096,
-        kWriteBufSize = 4096
-    };
 } // namespace __internal
 
 struct qservice::socket::IQService::Impl{
@@ -58,16 +52,6 @@ qservice::socket::IQService::IQService(const char* host, unsigned int port)
     if(!__internal::listen(host, port, socket_)){
         exit(EXIT_FAILURE);
     }
-}
-
-constexpr ssize_t qservice::socket::IQService::get_recv_buf_size() const
-{
-    return __internal::kRecvBufSize;
-}
-
-constexpr ssize_t qservice::socket::IQService::get_send_buf_size() const
-{
-    return __internal::kWriteBufSize;
 }
 
 void qservice::socket::IQService::push_to_send(const RawDataPtr& data)

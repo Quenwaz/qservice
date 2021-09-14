@@ -17,6 +17,10 @@ typedef std::function<void(RawDataPtr)> FnRecvCallBack;
 
 class IQService
 {
+    enum ConstantVar{
+        kRecvBufSize = 4096,
+        kWriteBufSize = 4096
+    };
 protected:
     /// 服务socket 
     uintptr_t socket_;
@@ -39,14 +43,20 @@ public:
      * 
      * @return ssize_t buf大小
      */
-    constexpr ssize_t get_recv_buf_size() const;
+    constexpr ssize_t get_recv_buf_size() const
+    {
+        return kRecvBufSize;
+    }
 
     /**
      * @brief 获取发送数据buf大小
      * 
      * @return ssize_t buf大小
      */
-    constexpr ssize_t get_send_buf_size() const;
+    constexpr ssize_t get_send_buf_size() const
+    {
+        return kWriteBufSize;
+    }
 
     /**
      * @brief 添加待发送数据到发送队列中

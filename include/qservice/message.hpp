@@ -17,10 +17,13 @@
 namespace qservice{
 namespace http{
 
+class HttpParser;
 class Message
 {
     typedef std::unordered_map<std::string, std::string> Headers;
 public:
+    friend class HttpParser;
+
     Version get_version() const{
         return this->http_version_;
     }
