@@ -43,6 +43,8 @@ void* qservice::socket::QServiceMT::thread_proc(void* data)
         memcpy(&rawdata->data[0],recv_buffer, num_read);
         thdata.data->pending_recv_data_.push(rawdata);
         thdata.data->fn_recv_call_back_(rawdata);
+
+        ::send(thdata.socket, "<h1>test<h2>", 4, 0);
     }
     
     return nullptr;

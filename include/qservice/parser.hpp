@@ -25,19 +25,26 @@ public:
     
     enum Status
     {
-        kCorruption,
         kUndone,
+        kNext,
         kFinish
     };
 
 
     Status Feed(const std::string& data);
 
+    Status ParseAll();
+
+    Status ParseReqLine();
+    Status ParseHeader();
+    Status ParseBody();
+
     bool GetMessage(Message& message);
 
 private:
     Status status_;
-    std::ostringstream stream_;
+    std::string data_;
+    size_t cursor_;
     Message message_;
 };
 

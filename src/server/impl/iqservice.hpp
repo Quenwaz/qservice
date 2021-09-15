@@ -18,7 +18,7 @@ typedef std::function<void(RawDataPtr)> FnRecvCallBack;
 class IQService
 {
     enum ConstantVar{
-        kRecvBufSize = 4096,
+        kRecvBufSize = 128,
         kWriteBufSize = 4096
     };
 protected:

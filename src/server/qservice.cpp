@@ -28,11 +28,15 @@ qservice::QService::QService(const char* host, unsigned int port)
 
     this->impl_->service_->set_recv_callback([&](qservice::socket::RawDataPtr rawdata)->void{
         auto iter_find = this->impl_->parser_.find(rawdata->host);
+        qservice::http::HttpParserPtr parser;
         if (iter_find == this->impl_->parser_.end()){
-            iter_find->second = std::make_shared<qservice::http::HttpParser>();
+            parser = std::make_shared<qservice::http::HttpParser>();
+            this->impl_->parser_.insert(std::make_pair(rawdata->host, parser));
+        }else{
+            parser = iter_find->second;
         }
 
-        iter_find->second->Feed((const char*)rawdata->data.get());
+        parser->Feed((const char*)rawdata->data.get());
     });
 
 
