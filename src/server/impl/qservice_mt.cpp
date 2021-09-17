@@ -44,7 +44,8 @@ void* qservice::socket::QServiceMT::thread_proc(void* data)
         thdata.data->pending_recv_data_.push(rawdata);
         thdata.data->fn_recv_call_back_(rawdata);
 
-        ::send(thdata.socket, "<h1>test<h2>", 4, 0);
+        const auto content = "HTTP/1.1 200 Ok\r\nServer: Quenwaz\r\nDate: Thu, 16 Sep 2021 03:50:00 GMT\r\nContent-type: text/html\r\nContent-Length:25\r\nLast-Modified:Thu, 16 Sep 2021 03:50:00 GMT\r\n\r\n<h1>I am your father!<h2>";
+        ::send(thdata.socket, content, strlen(content), 0);
     }
     
     return nullptr;
