@@ -37,6 +37,30 @@ public:
         return this->body_;
     }
 private:
+    void set_http_version(const std::string_view& version){
+        if (version == "HTTP/1.0"){
+            http_version_ = Version::HTTP_1_0;
+        }else if (version == "HTTP/1.1")
+        {
+            http_version_ = Version::HTTP_1_1;
+        }
+    }
+
+    void set_http_method(const std::string_view& method){
+        if (method == "POST"){
+            method_ = Method::POST;
+        }else if (method ==  "GET"){
+            method_ = Method::GET;
+        }
+    }
+
+private:
+    /// http 请求方法
+    Method method_;
+
+    /// url
+    std::string resource_;
+
     /// http 版本
     Version http_version_{Version::HTTP_1_1};
 

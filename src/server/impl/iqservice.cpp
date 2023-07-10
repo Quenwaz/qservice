@@ -13,13 +13,16 @@
 
 namespace __internal
 {
-    bool listen(const char* host, unsigned int port, uintptr_t & sock)
+    bool listen(const char* host, unsigned int port, int & sock)
     {
         sock = socket(AF_INET, SOCK_STREAM, 0);
         if (sock == -1)
         {
             return false;
         }
+
+        int flag = 1;
+        setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &flag, sizeof(flag));
 
         struct sockaddr_in _addr;
         _addr.sin_family = AF_INET;
@@ -41,25 +44,25 @@ namespace __internal
     }
 } // namespace __internal
 
-struct qservice::socket::IQService::Impl{
+struct qservice::tcp::IQService::Impl{
     std::unordered_map<std::string, int> connections;
 };
 
-qservice::socket::IQService::IQService(const char* host, unsigned int port)
+qservice::tcp::IQService::IQService(const char* host, unsigned int port)
     : impl_(std::make_shared<Impl>())
-    , fn_recv_call_back_(nullptr)
+    , ioptr_(std::make_shared<IO>())
 {
     if(!__internal::listen(host, port, socket_)){
         exit(EXIT_FAILURE);
     }
 }
 
-void qservice::socket::IQService::push_to_send(const RawDataPtr& data)
+void qservice::tcp::IQService::push_to_send(const RawDataPtr& data)
 {
     this->pending_send_data_.push(data);
 }
 
-bool qservice::socket::IQService::dequeue_data(RawDataPtr& data)
+bool qservice::tcp::IQService::dequeue_data(RawDataPtr& data)
 {
     if(this->pending_recv_data_.empty()){
         return false;

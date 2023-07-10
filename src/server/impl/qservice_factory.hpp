@@ -3,7 +3,7 @@
 #include "iqservice.hpp"
 
 
-namespace qservice::socket{
+namespace qservice::tcp{
 
 IQServicePtr create_qservice(const char* host, unsigned int port, ssize_t connections);
 

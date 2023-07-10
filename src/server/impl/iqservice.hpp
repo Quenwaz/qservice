@@ -4,8 +4,10 @@
 #include <vector>
 #include <memory>
 #include <queue>
+#include "common/connection.hpp"
+#include "common/io.hpp"
 
-namespace qservice::socket{
+namespace qservice::tcp{
 
 typedef struct RawData{
     std::string host;
@@ -15,15 +17,15 @@ typedef struct RawData{
 typedef std::shared_ptr<RawData> RawDataPtr;
 typedef std::function<void(RawDataPtr)> FnRecvCallBack;
 
+
 class IQService
 {
-    enum ConstantVar{
-        kRecvBufSize = 128,
-        kWriteBufSize = 4096
-    };
 protected:
+ 
     /// 服务socket 
-    uintptr_t socket_;
+    int socket_;
+
+    IOPtr ioptr_;
 
     // 待处理的接收数据队列
     std::queue<RawDataPtr> pending_recv_data_;
@@ -31,32 +33,14 @@ protected:
     /// 待处理的发送数据队列
     std::queue<RawDataPtr> pending_send_data_;
 
-    // 接收到数据转发出去处理的回调函数
-    FnRecvCallBack  fn_recv_call_back_;
+    /// 已经构建连接的队列
+    std::queue<ConnectionPtr> connection_queue_;
+
 public:
     IQService() = delete;
     IQService(const char* host, unsigned int port);
     virtual ~IQService() = default;
 
-    /**
-     * @brief 获取接收数据buf大小
-     * 
-     * @return ssize_t buf大小
-     */
-    constexpr ssize_t get_recv_buf_size() const
-    {
-        return kRecvBufSize;
-    }
-
-    /**
-     * @brief 获取发送数据buf大小
-     * 
-     * @return ssize_t buf大小
-     */
-    constexpr ssize_t get_send_buf_size() const
-    {
-        return kWriteBufSize;
-    }
 
     /**
      * @brief 添加待发送数据到发送队列中
@@ -74,13 +58,8 @@ public:
      */
     bool dequeue_data(RawDataPtr& data);
 
-
-    void set_recv_callback(FnRecvCallBack fnrecv){
-        fn_recv_call_back_ = fnrecv;
-    }
-
     virtual void run() = 0;
-protected:
+private:
     struct Impl;
     std::shared_ptr<Impl> impl_;
 };

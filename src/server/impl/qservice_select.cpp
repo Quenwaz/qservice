@@ -1,7 +1,7 @@
 #include "qservice_select.hpp"
 
 
-qservice::socket::QServiceSelect::QServiceSelect(const char* host, unsigned int port)
+qservice::tcp::QServiceSelect::QServiceSelect(const char* host, unsigned int port)
     : IQService(host, port)
 {
 
@@ -9,7 +9,7 @@ qservice::socket::QServiceSelect::QServiceSelect(const char* host, unsigned int 
 
 
 
-void qservice::socket::QServiceSelect::run()
+void qservice::tcp::QServiceSelect::run()
 {
     
 }

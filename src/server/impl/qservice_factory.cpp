@@ -2,9 +2,9 @@
 #include "qservice_mt.hpp"
 #include "qservice_select.hpp"
 #include "qservice_epoll.hpp"
+#include <thread>
 
-
-qservice::socket::IQServicePtr qservice::socket::create_qservice(const char* host, unsigned int port, ssize_t connections)
+qservice::tcp::IQServicePtr qservice::tcp::create_qservice(const char* host, unsigned int port, ssize_t connections)
 {
     if (connections > 0 && connections <= 64){
         // multi thread or multi process

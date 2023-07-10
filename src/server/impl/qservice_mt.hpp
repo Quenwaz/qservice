@@ -2,7 +2,7 @@
 #define _H_QSERVICE_MT_INCLUDED__
 #include "iqservice.hpp"
 
-namespace qservice::socket
+namespace qservice::tcp
 {
 class QServiceMT : public IQService
 {
@@ -13,10 +13,11 @@ public:
     void run() override;
 
 private:
-    static void* thread_proc(void* data);
-public:
-    struct ThreadData;
-    friend ThreadData;
+    void thread_proc(void);
+private:
+    struct Impl;
+    Impl* implptr;
+
 };
 
 }

@@ -2,7 +2,7 @@
 #define _H_QSERVICE_SELECT_INCLUDED__
 #include "iqservice.hpp"
 
-namespace qservice::socket
+namespace qservice::tcp
 {
 class QServiceSelect : public IQService
 {

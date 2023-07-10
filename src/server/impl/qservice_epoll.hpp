@@ -2,7 +2,7 @@
 #define _H_QSERVICE_EPOLL_INCLUDED__
 #include "iqservice.hpp"
 
-namespace qservice::socket
+namespace qservice::tcp
 {
 class QServiceEpoll : public IQService
 {

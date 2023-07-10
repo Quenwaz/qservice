@@ -2,47 +2,29 @@
 #include "impl/qservice_factory.hpp"
 #include <unordered_map>
 #include "utils/threadpool.hpp"
-#include "qservice/parser.hpp"
+#include "common/http_parser.hpp"
+
 
 struct qservice::QService::Impl
 {
-    explicit Impl(socket::IQServicePtr ptr)
+    explicit Impl(tcp::IQServicePtr ptr)
     : service_(ptr)
     {
 
     }
 
-    socket::IQServicePtr service_{nullptr};
+    tcp::IQServicePtr service_{nullptr};
 
     // 资源路由及对应处理
     std::unordered_map<std::string, Route>  routes_;
 
-    std::unordered_map<std::string, qservice::http::HttpParserPtr> parser_;
 
 };
 
 qservice::QService::QService(const char* host, unsigned int port)
-    : impl_(std::make_shared<Impl>(socket::create_qservice(host, port, 64)))
+    : impl_(std::make_shared<Impl>(tcp::create_qservice(host, port, 64)))
 {
-    utils::thread::ThreadPool::GetInstance()->Initialize(64);
 
-    this->impl_->service_->set_recv_callback([&](qservice::socket::RawDataPtr rawdata)->void{
-        auto iter_find = this->impl_->parser_.find(rawdata->host);
-        qservice::http::HttpParserPtr parser;
-        if (iter_find == this->impl_->parser_.end()){
-            parser = std::make_shared<qservice::http::HttpParser>();
-            this->impl_->parser_.insert(std::make_pair(rawdata->host, parser));
-        }else{
-            parser = iter_find->second;
-        }
-
-        parser->Feed((const char*)rawdata->data.get());
-    });
-
-
-    utils::thread::ThreadPool::GetInstance()->PushTask([](void* dataptr){
-
-    }, nullptr);
 }
 
 

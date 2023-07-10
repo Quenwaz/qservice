@@ -12,7 +12,7 @@
 #define _H_parser_included__
 #include <string_view>
 #include <sstream>
-#include "message.hpp"
+#include "qservice/message.hpp"
 #include <memory>
 
 namespace qservice{
@@ -27,6 +27,7 @@ public:
     {
         kUndone,
         kNext,
+        kExcept,
         kFinish
     };
 

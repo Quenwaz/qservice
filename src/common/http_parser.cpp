@@ -1,4 +1,4 @@
-#include "qservice/parser.hpp"
+#include "common/http_parser.hpp"
 #include <functional>
 #include <algorithm>
 #include <iostream>
@@ -6,7 +6,14 @@
 qservice::http::HttpParser::Status qservice::http::HttpParser::Feed(const std::string &data)
 {
     std::copy(data.begin(), data.end(), std::back_inserter(this->data_));
-    return this->ParseAll();
+    if (this->data_.rfind("\r\n\r\n") == std::string::npos)
+    {
+        status_ = Status::kUndone;
+    }
+    else 
+        status_ =  this->ParseAll();
+    
+    return status_;
 }
 
 qservice::http::HttpParser::Status qservice::http::HttpParser::ParseAll()
@@ -62,6 +69,9 @@ qservice::http::HttpParser::Status qservice::http::HttpParser::ParseReqLine()
         return Status::kUndone;
     }
 
+    this->message_.set_http_version(http_version);
+    this->message_.set_http_method(method);
+
     return Status::kNext;
 }
 
@@ -83,7 +93,8 @@ qservice::http::HttpParser::Status qservice::http::HttpParser::ParseHeader()
 
         auto key = header.substr(0, sep);
         auto val = header.substr(sep + 1);
-        std::cerr << '[' << pos << ']' << key.c_str() << " : " << val.c_str() << std::endl;
+        // std::cerr << '[' << pos << ']' << key.c_str() << " : " << val.c_str() << std::endl;
+        this->message_.headers_[key] = val;
     }
 
     oldpos += this->cursor_;
@@ -108,10 +119,16 @@ qservice::http::HttpParser::Status qservice::http::HttpParser::ParseBody()
         return Status::kFinish;
     }
 
+    this->message_.body_ = this->data_.substr(this->cursor_);
+    this->data_.clear();
     return Status::kFinish;
 }
 
 bool qservice::http::HttpParser::GetMessage(Message &message)
 {
+    if (status_ !=  Status::kFinish){
+        return false;
+    }
+    message = this->message_;
     return true;
 }
